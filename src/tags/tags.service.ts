@@ -21,6 +21,7 @@ export class TagsService {
   }
 
   async findByOwner(ownerId: string): Promise<TagDocument[]> {
+    console.log('ownerId', ownerId);
     return this.tagModel
       .find({ ownerId: new Types.ObjectId(ownerId) })
       .sort({ name: 1 })

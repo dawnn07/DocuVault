@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { console } from 'inspector';
 import { Model, Types } from 'mongoose';
 import { TagsService } from 'src/tags/tags.service';
 
@@ -36,12 +37,12 @@ export class DocumentsService {
 
     const document = new this.documentModel({
       ownerId: new Types.ObjectId(ownerId),
-      // eslint-disable-next-line
+
       filename: file.originalname,
-      // eslint-disable-next-line
+
       mime: file.mimetype,
       textContent: uploadDto.textContent || '',
-      // eslint-disable-next-line
+
       fileData: file.buffer,
     });
 
@@ -122,9 +123,9 @@ export class DocumentsService {
 
   async getDocumentsByFolder(
     ownerId: string,
-    folderName: string
+    tagId: string
   ): Promise<DocumentDocument[] | []> {
-    const tag = await this.tagsService.findByName(ownerId, folderName);
+    const tag = await this.tagsService.findById(tagId, ownerId);
 
     if (!tag) {
       throw new NotFoundException('Folder not found');
@@ -135,12 +136,14 @@ export class DocumentsService {
         tagId: tag._id,
         isPrimary: true,
       })
-      .populate<{ documentId: DocumentDocument }>('documentId')
+      .populate('documentId')
       .exec();
+
+    console.log('Document tags:', documentTags);
 
     const documents =
       documentTags
-        .map((dt) => dt.documentId)
+        .map((dt) => dt.documentId as unknown as DocumentDocument)
         .filter((doc) => doc && doc.ownerId.toString() === ownerId) || [];
 
     return documents;
@@ -172,6 +175,7 @@ export class DocumentsService {
       $text: { $search: searchDto.q },
     };
 
+    console.log('Search query:', searchDto);
     if (searchDto.scope === 'files' && searchDto.ids) {
       query._id = { $in: searchDto.ids.map((id) => new Types.ObjectId(id)) };
     }

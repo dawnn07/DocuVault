@@ -22,3 +22,4 @@ export class Document {
 }
 
 export const DocumentSchema = SchemaFactory.createForClass(Document);
+DocumentSchema.index({ ownerId: 1, textContent: 'text', filename: 'text' });

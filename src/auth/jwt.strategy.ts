@@ -15,9 +15,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload The decoded JWT payload.
    * @returns An object containing user information.
    */
-  validate(payload: { sub: string; email: string }) {
+  validate(payload: { sub: string; email: string; role: string }) {
     console.log('JwtStrategy.validate payload:', payload);
     // return user object or throw
-    return { id: payload.sub, email: payload.email };
+    return { id: payload.sub, email: payload.email, role: payload.role };
   }
 }

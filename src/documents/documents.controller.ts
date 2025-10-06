@@ -18,8 +18,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/common/decorators/curent-user.decorator';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { JwtPayload } from 'src/common/types/request.type';
 
 import { DocumentsService } from './documents.service';
@@ -63,13 +63,13 @@ export class DocumentsController {
       throw new BadRequestException('File is required');
     }
 
-    return this.documentsService.upload(user.sub, file, uploadDto);
+    return this.documentsService.upload(user.id, file, uploadDto);
   }
 
   @Get('folders')
   getFolders(@CurrentUser() user: JwtPayload) {
-    console.log('User ID:', user); // Debugging line
-    return this.documentsService.getFolders(user.sub);
+    console.log('User ID:', user.id); // Debugging line
+    return this.documentsService.getFolders(user.id);
   }
 
   @Get('folders/:tag/docs')
@@ -77,14 +77,15 @@ export class DocumentsController {
     @CurrentUser() user: JwtPayload,
     @Param('tag') tag: string
   ) {
-    return this.documentsService.getDocumentsByFolder(user.sub, tag);
+    return this.documentsService.getDocumentsByFolder(user.id, tag);
   }
 
   @Get('search')
+  @ApiOperation({ summary: 'Search documents' })
   search(
     @CurrentUser() user: JwtPayload,
     @Query() searchDto: SearchDocumentDto
   ) {
-    return this.documentsService.search(user.sub, searchDto);
+    return this.documentsService.search(user.id, searchDto);
   }
 }

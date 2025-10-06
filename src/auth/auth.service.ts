@@ -34,6 +34,8 @@ export class AuthService {
     const user = await this.userModel.create({
       email: dto.email,
       password: hashedPassword,
+      role: 'user',
+      credits: 0,
     });
 
     const tokens = await this.generateTokens(user);
@@ -120,6 +122,7 @@ export class AuthService {
         {
           sub: user._id,
           email: user.email,
+          role: user.role,
         },
         {
           secret: process.env.JWT_SECRET || 'secret_key',
