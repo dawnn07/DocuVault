@@ -201,4 +201,21 @@ export class DocumentsService {
 
     return documents;
   }
+
+  async create(
+    ownerId: string,
+    filename: string,
+    mime: string,
+    content: string | Buffer
+  ): Promise<DocumentDocument> {
+    const document = new this.documentModel({
+      ownerId: new Types.ObjectId(ownerId),
+      filename,
+      mime,
+      textContent: typeof content === 'string' ? content : '',
+      fileData: typeof content === 'string' ? Buffer.from(content) : content,
+    });
+
+    return document.save();
+  }
 }
