@@ -19,6 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CurrentUser } from 'src/common/decorators/curent-user.decorator';
+import { Roles } from 'src/common/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { JwtPayload } from 'src/common/types/request.type';
 
@@ -34,6 +35,7 @@ export class DocumentsController {
   constructor(private readonly documentsService: DocumentsService) {}
 
   @Post('docs')
+  @Roles('user', 'admin')
   @ApiOperation({ summary: 'Upload a document file' })
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
