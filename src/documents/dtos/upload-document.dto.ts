@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsArray, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class UploadDocumentDto {
@@ -8,6 +9,10 @@ export class UploadDocumentDto {
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return [];
+    return Array.isArray(value) ? value.map(String) : [String(value)];
+  })
   secondaryTags?: string[];
 
   @IsString()

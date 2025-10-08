@@ -118,6 +118,8 @@ export class DocumentsService {
       })
     );
 
+    console.log('Folders before filtering:', folders); // Debugging line
+
     return folders.filter((f) => f.documentCount > 0);
   }
 

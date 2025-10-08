@@ -48,10 +48,7 @@ export class DocumentsController {
           format: 'binary',
         },
         primaryTag: { type: 'string' },
-        secondaryTags: {
-          type: 'array',
-          items: { type: 'string' },
-        },
+        secondaryTags: { type: 'array', items: { type: 'string' } },
         textContent: { type: 'string' },
       },
     },
@@ -70,7 +67,6 @@ export class DocumentsController {
 
   @Get('folders')
   getFolders(@CurrentUser() user: JwtPayload) {
-    console.log('User ID:', user.id); // Debugging line
     return this.documentsService.getFolders(user.id);
   }
 
