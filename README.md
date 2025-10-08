@@ -6,7 +6,6 @@ A production-ready NestJS backend service with MongoDB that demonstrates:
 - OCR ingestion webhook with content classification
 - Role-Based Access Control (RBAC)
 - Comprehensive auditing and metrics
-- Full test coverage
 
 ## Features
 
